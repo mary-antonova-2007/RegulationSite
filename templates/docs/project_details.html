@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+
+{% block navigation %}
+    <div class="d-flex flex-column  pt-3 div-buttons-container">
+        {% for room, room_products in products_grouped_by_room.items %}
+            <h5 class="text-center btn-dark col-12 nav-header">{{ room }}</h5>
+            {% for product in room_products %}
+                <a class="btn btn-outline-dark my-1 btn-block btn-custom-padding text-left text-wrap" href="{% url 'product_details' product.id %}">{{ product.name }} <strong>({{ product.designation }})</strong></a>
+            {% empty %}
+                <h4>Изделия отсутствуют в этой комнате.</h4>
+            {% endfor %}
+        {% empty %}
+            <h3>Изделия отсутствуют.</h3>
+        {% endfor %}
+        {% include 'default_buttons.html' %}
+    </div>
+{% endblock %}
+{% block header %} <h1>Проект {{ project.name }}</h1> {% endblock %}
+{% block content %}
+<div class="container">
+    <div class="card mb-3">
+        <div class="card-header bg-secondary text-white">
+            <h5> Данные проекта </h5>
+        </div>
+        <div class="card-body">
+            <h5> <strong>Договор:</strong> {{ project.designation }}</h5>
+            <h5> <strong>Менеджер проекта:</strong> {{ project.project_manager.profile.first_name }} {{ project.project_manager.profile.last_name }}</h5>
+            <h5> <strong>Старший конструктор:</strong> {{ project.project_designer.profile.first_name }} {{ project.project_designer.profile.last_name }}</h5>
+            <h5><strong>Информация:</strong></h5>
+            <p>{{ project.description }}</p>
+        </div>
+    </div>
+
+
+     <h3>Документы проекта</h3>
+    {% for doc_type, docs in project_documents_grouped.items %}
+        <div class="card mb-3">
+            <div class="card-header bg-secondary text-white">{{ doc_type }}</div>
+            <div class="card-body">
+                <ul class="list-unstyled">
+                    {% for document in docs %}
+                        <li class="mb-1">
+                            {{ document.name }} <br> <strong>Добавлен:</strong> {{ document.created_at|date:"d-m-Y H:i" }}
+                            <div class="mt-auto d-flex justify-content-end">
+                                <a href="{% url 'open_document' document.id %}" class="btn btn-success mx-2">Открыть</a>
+                                {% if can_edit_docs %}
+                                <a href="{% url 'download_document' document.id %}" class="btn btn-primary float-end">Скачать</a>
+
+                                <a href="{% url 'archive_document' document.id %}" class="btn btn-secondary float-end mx-2">В архив</a>
+                                {% endif %}
+                            </div>
+                        </li>
+                    {% empty %}
+                        <li>Нет документов этого типа.</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    {% endfor %}
+    {% if can_edit_docs %}
+        <!-- Форма для добавления документов -->
+    <div class="card my-4">
+        <div class="card-header bg-secondary text-white">Загрузить документы</div>
+        <div class="card-body">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="btn btn-primary">Добавить документ</button>
+            </form>
+        </div>
+    </div>
+    {% endif %}
+    <!-- Отображение архивированных документов -->
+    <h3>Архив документов</h3>
+    <ul class="list-unstyled">
+        {% for document in archived_documents %}
+            <li><strong>{{ document.document_type.name }}: </strong>{{ document.name }}  {{ document.created_at }} - <a href="{{ document.content.url }}">Скачать</a></li>
+        {% empty %}
+            <li>Нет архивированных документов.</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

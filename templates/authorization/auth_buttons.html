@@ -1,0 +1,39 @@
+<!-- auth_buttons.html -->
+<div id="auth-buttons" class="nav">
+    {% if user.is_authenticated %}
+        <div class="container">
+            <div class="row">
+                <div class="col-2">
+                    {% if user.profile.avatar %}
+                        <img src="{{ user.profile.avatar.url }}" alt="{{ image.caption }}" class="img-fluid" style="cursor: pointer;" onclick="openImage(this)">
+                    {% endif %}
+                </div>
+                <div class="col-3">
+                    <a href="{% url 'edit_profile' %}" class="nav-link"> <!-- Изменено на ссылку редактирования профиля -->
+                    <i class="bi bi-pencil-square"></i> Редактировать профиль
+                    </a>
+                    <a href="{% url 'change_password' %}" class="nav-link">
+                        <i class="bi bi-gear-fill"></i> Сменить пароль
+                    </a>
+                    <form action="{% url 'logout' %}" method="post" style="display: inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-link nav-link">
+                            <i class="bi bi-box-arrow-right"></i> Выход
+                        </button>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+
+
+
+    {% else %}
+        <a href="{% url 'login' %}" class="nav-link">
+            <i class="bi bi-box-arrow-in-right"></i> Вход
+        </a>
+        <a href="{% url 'register' %}" class="nav-link">
+            <i class="bi bi-person-plus"></i> Регистрация
+        </a>
+    {% endif %}
+</div>

@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block navigation %}
+    <h2>Проекты</h2>
+    <div class="d-flex flex-column  pt-3 div-buttons-container">
+        {% for project in projects %}
+            <a class="btn btn-outline-dark my-1 btn-block btn-custom-padding" href="{% url 'project_details' project.id %}" class="list-group-item list-group-item-action">
+                <strong>{{ project.name }}</strong>
+                <br>
+                {{ project.designation }}
+            </a>
+        {% endfor %}
+        {% include 'default_buttons.html' %}
+    </div>
+{% endblock %}
+
+{% block content %}
+ <div class="text-center"> <!-- Центрирование текста -->
+    <h3>Выберите проект для просмотра деталей</h3>
+    <img src="{% static 'projects.png' %}" alt="Проекты" class="img-fluid"> <!-- Адаптивное изображение -->
+</div>
+
+{% endblock %}

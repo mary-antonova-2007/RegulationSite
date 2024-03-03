@@ -1,0 +1,125 @@
+{% extends 'base.html' %}
+{% load my_tags %}
+
+{% block navigation %}
+    <div class="d-flex flex-column  pt-3 div-buttons-container">
+        {% include 'default_buttons.html' %}
+    </div>
+{% endblock %}
+{% block content %}
+<div class="container mt-4">
+    <h2>Уведомления</h2>
+    <a class="btn btn-primary my-1 btn-block btn-custom-padding text-white" onclick="markNotificationsAsRead()">Отметить все как прочитанные</a>
+
+    <!-- Непрочитанные уведомления -->
+    {% for notification in unread_notifications %}
+    <div class="card mb-3 new-notification">
+        <div class="card-header">
+            Уведомление - {{ notification.created_at|date:"d.m.Y H:i" }}
+        </div>
+        <div class="card-body">
+             {% if notification.project %}
+                <h5 class="card-title">
+                    <a href="{% url 'project_details' notification.project.id %}">
+                        {{ notification.get_type_display }} в проекте "{{ notification.project.name }}"
+                    </a>
+                </h5>
+            {% else %}
+                <h5 class="card-title">
+                    {{ notification.get_type_display }} (Проект не указан)
+                </h5>
+            {% endif %}
+            <p class="card-text"> Пользователь: <strong> {{ notification.from_user.profile.first_name }} {{ notification.from_user.profile.last_name }}</strong> </p>
+            {% if notification.product %}
+                <p class="card-text">
+                    Изделие:
+                    <a href="{% url 'product_details' notification.product.id %}">
+                        {{ notification.product.name }}
+                    </a>
+                </p>
+            {% endif %}
+            {% if notification.work_document %}
+                <p class="card-text">
+                    Документ:
+                    <a href="{% url 'download_document' notification.work_document.id %}">
+                        {{ notification.work_document.name }}
+                    </a>
+                </p>
+            {% else %}
+                <p class="card-text">Документ не указан</p>
+            {% endif %}
+            <p class="card-text">{{ processed_messages|get_item:notification|safe|linebreaksbr }}</p>
+            <p class="card-text text-end pulse">
+                {{ "Новое уведомление" }}
+            </p>
+        </div>
+    </div>
+    {% endfor %}
+
+    <!-- Прочитанные уведомления -->
+    {% for notification in read_notifications %}
+    <div class="card mb-3 read-notification">
+        <div class="card-header">
+            Уведомление - {{ notification.created_at|date:"d.m.Y H:i" }}
+        </div>
+        <div class="card-body">
+             {% if notification.project %}
+                <h5 class="card-title">
+                    <a href="{% url 'project_details' notification.project.id %}">
+                        {{ notification.get_type_display }} в проекте "{{ notification.project.name }}"
+                    </a>
+                </h5>
+            {% else %}
+                <h5 class="card-title">
+                    {{ notification.get_type_display }} (Проект не указан)
+                </h5>
+            {% endif %}
+            <p class="card-text"> Пользователь: <strong> {{ notification.from_user.profile.first_name }} {{ notification.from_user.profile.last_name }}</strong> </p>
+            {% if notification.product %}
+                <p class="card-text">
+                    Изделие:
+                    <a href="{% url 'product_details' notification.product.id %}">
+                        {{ notification.product.name }}
+                    </a>
+                </p>
+            {% endif %}
+            {% if notification.work_document %}
+                <p class="card-text">
+                    Документ:
+                    <a href="{% url 'download_document' notification.work_document.id %}">
+                        {{ notification.work_document.name }}
+                    </a>
+                </p>
+            {% else %}
+                <p class="card-text">Документ не указан</p>
+            {% endif %}
+            <p class="card-text">{{ processed_messages|get_item:notification|safe|linebreaksbr }}</p>
+            <p class="card-text text-muted text-end">
+                {{ "Прочитано" }}
+            </p>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<script>
+    function markNotificationsAsRead() {
+        fetch("{% url 'mark_notifications_read' %}", {
+            method: 'GET',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'X-CSRFToken': '{{ csrf_token }}'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                console.log("Уведомления отмечены как прочитанные");
+                // Дополнительные действия, например, изменение стиля уведомлений
+                // Добавьте следующую строку, чтобы обновить страницу после успешной отметки уведомлений как прочитанных
+                location.reload();
+            }
+        });
+    }
+</script>
+{% endblock %}

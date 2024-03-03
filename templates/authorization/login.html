@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <h5 class="card-header text-center">Вход в систему</h5>
+                <div class="card-body">
+                    <form method="post" class="form-horizontal">
+                        {% csrf_token %}
+                        {% for field in form %}
+                            <div class="mb-3 text-center">
+                                <div class="d-inline-block" style="width: 100%; max-width: 300px;">
+                                    {% if field.name == 'username' %}
+                                        <input type="text" name="{{ field.name }}" class="form-control mx-auto" id="{{ field.id_for_label }}" placeholder="Логин" {% if field.value %}value="{{ field.value|stringformat:'s' }}"{% endif %}>
+                                    {% elif field.name == 'password' %}
+                                        <input type="password" name="{{ field.name }}" class="form-control mx-auto" id="{{ field.id_for_label }}" placeholder="Пароль">
+                                    {% else %}
+                                        {{ field }}
+                                    {% endif %}
+                                    {% for error in field.errors %}
+                                        <div class="invalid-feedback">
+                                            {{ error }}
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        {% endfor %}
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-dark">Войти</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

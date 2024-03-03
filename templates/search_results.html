@@ -1,0 +1,49 @@
+<!-- search_results.html -->
+{% extends 'base.html' %}
+{% load my_tags %}
+
+{% block navigation %}
+    <div class="d-flex flex-column  pt-3 div-buttons-container">
+    {% if projects %}
+        <h3 class="h3-custom">Проекты</h3>
+        {% for project in projects %}
+            <a class="btn btn-outline-dark my-1 btn-block btn-custom-padding text-left"
+               href="{% url 'project_details' project.id %}">
+                {{ project.name }} <strong>({{ project.designation }})
+            </strong></a>
+        {% endfor %}
+    {% endif %}
+    {% if products_sorted_by_product.keys %}
+        <h3 class="h3-custom">Проекты</h3>
+        {% for project in products_sorted_by_product.keys %}
+            {% if project %}
+                <h3 class="h3-custom">Проект: {{ project.name }}</h3>
+                {% for product in products_sorted_by_product|get_item:project %}
+                    <a class="btn btn-outline-dark my-1 btn-block btn-custom-padding text-left"
+                       href="{% url 'product_details' product.id %}">
+                        {{ product.name }} <strong>({{ product.designation }})
+                    </strong></a>
+                {% endfor %}
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+    </div>
+{% endblock %}
+{% block content %}
+    <div class="container mt-4">
+        <h2 class="text-center">Результаты поиска для "{{ query }}"</h2>
+        {% for section in sections %}
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h3 class="card-title">
+                        <a href="{% url 'section_page' section.id %}">{{ section.name }}</a>
+                    </h3>
+                    <p class="card-text">{{ section.processed_content|truncatewords:60|safe }}</p>  <!-- Показать первые 30 слов содержимого -->
+                </div>
+            </div>
+        {% empty %}
+            <p class="text-center">Ничего не найдено.</p>
+        {% endfor %}
+    <a class="btn btn-dark my-1" href="{% url 'index' %}">На главную</a>
+    </div>
+{% endblock %}

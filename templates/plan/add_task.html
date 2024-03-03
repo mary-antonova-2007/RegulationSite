@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-header">Добавление задачи</div>
+        <div class="card-body">
+            <form method="post" id="taskForm">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="btn btn-primary">Создать задачу</button>
+            </form>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    // JavaScript для динамической загрузки изделий и предшественников
+    document.addEventListener('DOMContentLoaded', function () {
+        var projectSelect = document.getElementById('id_project');
+        var productSelect = document.getElementById('id_product');
+        var predecessorSelect = document.getElementById('id_predecessors');
+
+        projectSelect.onchange = function() {
+            var projectId = projectSelect.value;
+            updateSelect('load_products/', projectId, productSelect);
+            updateSelect('load_predecessors/', projectId, predecessorSelect);
+        };
+
+        function updateSelect(url, projectId, select) {
+            fetch(`${url}?project_id=${projectId}`)
+                .then(response => response.json())
+                .then(data => {
+                    select.innerHTML = '';
+                    data.forEach(function (item) {
+                        var option = new Option(item.name, item.id);
+                        select.appendChild(option);
+                    });
+                });
+        }
+    });
+</script>
+{% endblock %}

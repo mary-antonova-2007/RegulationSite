@@ -1,0 +1,161 @@
+
+/* Стиль для малых экранов */
+@media (max-width: 1000px) {
+    .header-padding h1 {
+        text-align: center;
+    }
+}
+/* Стиль для больших экранов */
+@media (min-width: 1001px) {
+    .header-padding h1 {
+        text-align: center;
+    }
+}
+.header-padding {
+    text-align: center;
+    align-items: center;
+    padding: 20px; /* Задайте желаемое значение отступа */
+}
+.nav-header {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+.div-buttons-container {
+    padding: 0px; /* Установка внутреннего отступа в 10 пикселей */
+    margin-bottom: 20px !important; /* Увеличение расстояния между кнопками */
+}
+.image-container img {
+        max-width: 400px; /* Максимальная ширина */
+        max-height: 300px; /* Максимальная высота */
+        width: 100%; /* Заставляет изображение растягиваться по ширине контейнера */
+        height: auto; /* Сохраняет пропорции изображения */
+}
+.content-custom-padding {
+    padding: 80px; /* Установка внутреннего отступа в 10 пикселей */
+
+}
+.btn-custom-padding {
+    padding: 10px; /* Установка внутреннего отступа в 10 пикселей */
+    text-wrap: inherit;
+
+}
+.btn-custom-margin {
+    margin-bottom: 20px;
+}
+
+/* Стили для контейнера кнопок */
+.div-buttons-container {
+    margin-top: 20px;
+    padding-left: 25px;  /* Увеличение левого отступа */
+    padding-right: 25px; /* Увеличение правого отступа */
+}
+.h3-custom {
+    margin-bottom: 50px;
+}
+
+/* Стиль модального окна */
+.modal {
+    display: none; /* Скрыть модальное окно по умолчанию */
+    position: fixed; /* Оставаться на месте при прокрутке */
+    z-index: 1000; /* Ставить поверх других элементов */
+    padding-top: 100px; /* Расположение от верха */
+    left: 0;
+    top: 0;
+    width: 100%; /* Полная ширина */
+    height: 100%; /* Полная высота */
+    overflow: auto; /* Включить прокрутку, если нужно */
+    background-color: rgb(0,0,0); /* Цвет фона */
+    background-color: rgba(0,0,0,0.9); /* Черный с немного прозрачностью */
+}
+
+/* Стиль изображения внутри модального окна */
+.modal-content {
+    margin: auto;
+    display: block;
+    width: 80%;
+    max-width: 700px; /* Максимальная ширина */
+}
+
+/* Стиль кнопки закрыть */
+.close {
+    position: absolute;
+    top: 15px;
+    right: 35px;
+    color: #fff;
+    font-size: 40px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+#myBtn {
+    display: none; /* Скрыть кнопку по умолчанию */
+    position: fixed; /* Фиксированное позиционирование */
+    bottom: 20px; /* 20px от нижнего края */
+    right: 30px; /* 30px от правого края */
+    z-index: 99; /* Убедитесь, что кнопка будет поверх других элементов */
+    border: none; /* Убрать границу */
+    outline: none; /* Убрать контур */
+    background-color: #555; /* Цвет фона */
+    color: white; /* Цвет текста */
+    cursor: pointer; /* Добавить указатель курсора */
+    padding: 15px; /* Внутренний отступ */
+    border-radius: 10px; /* Скругленные углы */
+}
+
+#myBtn:hover {
+    background-color: #000; /* Изменить цвет фона при наведении */
+}
+
+/* Стили для контейнера уведомлений */
+#notification-container {
+    position: fixed !important;
+    bottom: 20px !important;
+    left: 20px !important;
+    z-index: 1000; /* Убедиться, что контейнер находится поверх других элементов */
+    display: flex; /* Используйте flexbox для выравнивания иконки и текста */
+    align-items: center; /* Выравнивание элементов по центру */
+}
+
+/* Стили для счетчика уведомлений */
+#notification-count {
+    background-color: #ff0000; /* Красный фон для счетчика */
+    color: #ffffff; /* Белый цвет текста */
+    border-radius: 50%; /* Круглая форма */
+    padding: 5px 10px; /* Отступы вокруг текста */
+    min-width: 25px; /* Минимальная ширина для сохранения круглой формы */
+    text-align: center; /* Выравнивание текста по центру */
+    margin-right: 10px; /* Отступ справа от текста */
+    font-size: 1rem; /* Размер шрифта текста */
+}
+
+/* Стили для иконки уведомлений */
+#notification-icon {
+    font-size: 2rem; /* Размер иконки */
+    color: #000000; /* Цвет иконки */
+    cursor: pointer; /* Курсор в виде указателя */
+}
+.new-notification {
+    background-color: #ffffff; /* Яркий фон */
+    color: #000000; /* Черный текст */
+    border-left: 10px solid #007bff; /* Голубой левый бордер */
+}
+
+.read-notification {
+    background-color: #f8f9fa; /* Серый фон */
+    color: #6c757d; /* Тусклый текст */
+}
+
+.card-header {
+    background-color: #e9ecef; /* Фон заголовка карточки */
+    color: #495057; /* Цвет текста заголовка */
+}
+@keyframes pulse {
+    0% { color: green; }
+    50% { color: limegreen; }
+    100% { color: green; }
+}
+
+.pulse {
+    animation: pulse 3s infinite;
+}
+/* Дополнительные стили для карточек и текста */

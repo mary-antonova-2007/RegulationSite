@@ -1,0 +1,6 @@
+{% if product and product.project %}
+    <a class="btn btn-secondary my-1 btn-block btn-custom-padding" href="{% url 'project_details' product.project.id %}">
+        Назад к проекту {{ product.project.name }}
+    </a>
+{% endif %}
+<a class="btn btn-dark my-1 btn-block btn-custom-padding" href="{% url 'index' %}">На главную</a>

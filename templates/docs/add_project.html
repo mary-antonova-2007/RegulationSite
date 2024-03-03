@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Добавление проекта</h2>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {% crispy project_form %}
+
+        <!-- Форма добавления комнат -->
+        <div id="room-formset-container" data-form-template="{{ room_formset.empty_form }}" class="mb-3">
+            {{ room_formset.management_form }}
+            <h4>Комнаты</h4>
+            <div class="row">
+                {% for form in room_formset %}
+                    <div class="col-12 col-md-6 mb-2">
+                        <div class="card p-2">
+                            {{ form.room_designation|as_crispy_field }}
+                            {{ form.room_name|as_crispy_field }}
+                            <button type="button" class="remove-form-button btn btn-danger btn-sm">Удалить</button>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            <button type="button" id="add-room-button" class="btn btn-success btn-sm">Добавить комнату</button>
+        </div>
+
+        <!-- Форма добавления изделий -->
+        <div id="product-formset-container" data-form-template="{{ product_formset.empty_form }}" class="mb-3">
+            {{ product_formset.management_form }}
+            <h4>Изделия</h4>
+            <div class="row">
+                {% for form in product_formset %}
+                    <div class="col-12 col-md-6 mb-2">
+                        <div class="card p-2">
+                            {{ form.name|as_crispy_field }}
+                            {{ form.designation|as_crispy_field }}
+                            {{ form.room|as_crispy_field }}
+                            {{ form.description|as_crispy_field }}
+                            <button type="button" class="remove-form-button btn btn-danger btn-sm">Удалить</button>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            <button type="button" id="add-product-button" class="btn btn-success btn-sm">Добавить изделие</button>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Создать проект</button>
+    </form>
+</div>
+{% endblock %}
+
+{% block scripts %}
+    {% include 'wide_screen.html' %}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Функция для добавления новой формы
+            function addForm(formsetContainer, formsetPrefix) {
+                var totalForms = document.querySelector(`#id_${formsetPrefix}-TOTAL_FORMS`);
+                var formNumber = parseInt(totalForms.value);
+                var newFormHtml = formsetContainer.getAttribute('data-form-template').replace(/__prefix__/g, formNumber);
+                formsetContainer.insertAdjacentHTML('beforeend', newFormHtml);
+                totalForms.value = formNumber + 1;
+            }
+
+            // Функция для удаления формы
+            function removeForm(button, formsetPrefix) {
+                var totalForms = document.querySelector(`#id_${formsetPrefix}-TOTAL_FORMS`);
+                if (totalForms.value > 1) {
+                    button.closest('.form-row').remove();
+                    totalForms.value = parseInt(totalForms.value) - 1;
+                }
+            }
+
+            // Получите контейнеры наборов форм и кнопки добавления/удаления
+            var roomFormsetContainer = document.querySelector('#room-formset-container');
+            var productFormsetContainer = document.querySelector('#product-formset-container');
+            var addRoomButton = document.querySelector('#add-room-button');
+            var addProductButton = document.querySelector('#add-product-button');
+
+            // Установка обработчиков событий для кнопок добавления
+            addRoomButton.addEventListener('click', function() {
+                addForm(roomFormsetContainer, 'room');
+            });
+
+            addProductButton.addEventListener('click', function() {
+                addForm(productFormsetContainer, 'product');
+            });
+
+            // Динамическое добавление обработчиков событий для кнопок удаления
+            roomFormsetContainer.addEventListener('click', function(event) {
+                if (event.target.classList.contains('remove-form-button')) {
+                    removeForm(event.target, 'room');
+                }
+            });
+
+            productFormsetContainer.addEventListener('click', function(event) {
+                if (event.target.classList.contains('remove-form-button')) {
+                    removeForm(event.target, 'product');
+                }
+            });
+        });
+    </script>
+{% endblock %}
